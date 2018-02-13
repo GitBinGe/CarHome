@@ -8,7 +8,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 
 import java.util.List;
 
@@ -79,6 +84,20 @@ public class Util {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Bitmap rsBlur(Context context, Bitmap source, int radius){
+        Bitmap inputBmp = source;
+        RenderScript renderScript =  RenderScript.create(context);
+        final Allocation input = Allocation.createFromBitmap(renderScript,inputBmp);
+        final Allocation output = Allocation.createTyped(renderScript,input.getType());
+        ScriptIntrinsicBlur scriptIntrinsicBlur = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
+        scriptIntrinsicBlur.setInput(input);
+        scriptIntrinsicBlur.setRadius(radius);
+        scriptIntrinsicBlur.forEach(output);
+        output.copyTo(inputBmp);
+        renderScript.destroy();
+        return inputBmp;
     }
 
 }

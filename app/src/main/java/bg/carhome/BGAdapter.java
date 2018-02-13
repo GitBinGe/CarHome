@@ -3,6 +3,7 @@ package bg.carhome;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
@@ -52,24 +53,28 @@ public class BGAdapter extends PagerAdapter {
         iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
         iv.setTag(path);
         container.addView(iv);
-
-        if (path.startsWith("#")) {
-            iv.setImageBitmap(null);
-            iv.setBackgroundColor(Color.parseColor(path));
-        } else {
-            Bitmap bitmap = ImageCache.share().get(path);
-            if (bitmap == null) {
+        Bitmap bitmap = ImageCache.share().get(path);
+        if (bitmap == null) {
+            if (path.startsWith("#")) {
+                bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                Canvas c = new Canvas(bitmap);
+                c.drawColor(Color.parseColor(path));
+                bitmap = Util.rsBlur(container.getContext(), bitmap, 25);
+                ImageCache.share().put(path, bitmap);
+            } else {
                 try {
                     bitmap = BitmapFactory.decodeStream(container.getContext().getAssets().open(path));
+                    bitmap = Util.rsBlur(container.getContext(), bitmap, 25);
                     ImageCache.share().put(path, bitmap);
                 } catch (IOException e) {
 
                 }
             }
-            iv.setImageBitmap(bitmap);
         }
+        iv.setImageBitmap(bitmap);
         return iv;
     }
+
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {

@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -97,7 +101,12 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         });
 
         ImageView iv = (ImageView) view.findViewById(R.id.image);
-        view.setBackgroundColor(0xffffffff & background);
+//        view.setBackgroundColor(0xffffffff & background);
+        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bitmap);
+        c.drawColor(background);
+        bitmap = Util.rsBlur(this, bitmap, 25);
+        view.setBackground(new BitmapDrawable(bitmap));
         iv.setImageResource(icon);
         TextView tv = (TextView) view.findViewById(R.id.text);
         tv.setText(name);
