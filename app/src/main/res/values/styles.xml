@@ -1,0 +1,37 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+    </style>
+
+    <style name="action_sheet" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowEnterAnimation">@anim/activity_alpha_in</item>
+        <item name="android:windowExitAnimation">@null</item>
+        <item name="android:windowAnimationStyle">@style/AlphaAnimation</item>
+    </style>
+
+    <!--渐变-->
+    <style name="AlphaAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_alpha_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_alpha_out</item>
+    </style>
+
+    <style name="share_dialog" parent="@style/action_sheet">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="dialog_translucent" parent="@style/action_sheet">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+</resources>
